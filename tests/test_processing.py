@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 from order_report.processing import (
-    calculate_order_value,
+    calculate_order_values,
     generate_kpi_summary,
     summarize_by_category,
     summarize_by_region
@@ -24,7 +24,7 @@ def sample_orders_df() -> pd.DataFrame:
 
 def test_calculate_order_values(sample_orders_df: pd.DataFrame) -> None:
     """Test correct calculation of total_price and discounted_price"""
-    result = calculate_order_value(sample_orders_df)
+    result = calculate_order_values(sample_orders_df)
 
     assert result.loc[0, "total_price"] == pytest.approx(200.0)
     assert result.loc[0, "discounted_price"] == pytest.approx(180.0)
@@ -34,7 +34,7 @@ def test_calculate_order_values(sample_orders_df: pd.DataFrame) -> None:
 
 def test_summarize_by_category(sample_orders_df: pd.DataFrame) -> None:
     """Tests category aggregation logic for order counts, sales, and returns"""
-    processed_df = calculate_order_value(sample_orders_df)
+    processed_df = calculate_order_values(sample_orders_df)
     summary = summarize_by_category(processed_df)
 
     assert len(summary) == 2
@@ -47,7 +47,7 @@ def test_summarize_by_category(sample_orders_df: pd.DataFrame) -> None:
 
 def test_summarize_by_region(sample_orders_df: pd.DataFrame) -> None:
     """Tests regional aggregation logic for order counts, sales, and returns"""
-    processed_df = calculate_order_value(sample_orders_df)
+    processed_df = calculate_order_values(sample_orders_df)
     summary = summarize_by_region(processed_df)
 
     assert len(summary) == 2
@@ -59,7 +59,7 @@ def test_summarize_by_region(sample_orders_df: pd.DataFrame) -> None:
 
 def test_generate_kpi_summary(sample_orders_df: pd.DataFrame) -> None:
     """Tests high-level KPI metric calculations including return rate percentage"""
-    processed_df = calculate_order_value(sample_orders_df)
+    processed_df = calculate_order_values(sample_orders_df)
     kpis = generate_kpi_summary(processed_df)
 
     assert kpis.loc[0, "total_orders"] == 4

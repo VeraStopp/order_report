@@ -2,9 +2,6 @@
 import logging
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-LOG_FILE = BASE_DIR / "order_report.log"
-
 REQUIRED_COLUMNS = {
     "order_id",
     "order_date",
@@ -17,10 +14,18 @@ REQUIRED_COLUMNS = {
     "returned",
 }
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+INPUT_FILE_PATH = BASE_DIR / "data" / "orders.csv"
+OUTPUT_DIR = BASE_DIR / "output"
+LOG_FILE = BASE_DIR / "order_report.log"
+
 LOGGER_NAME = "order_report"
 
 def configure_logging() -> None:
-    """Configures package-specific logging for order_report"""
+    """Configures package specific logging for order_report"""
+    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
     package_logger = logging.getLogger(LOGGER_NAME)
 
     if package_logger.handlers:
